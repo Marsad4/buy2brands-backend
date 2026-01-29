@@ -13,18 +13,20 @@ async function createTransporter() {
     const transporter = nodemailer.createTransport({
         host,
         port,
-        secure,
+        secure, // true for 465, false for other ports
         auth: {
             user: process.env.HOSTINGER_SMTP_USER,
             pass: process.env.HOSTINGER_SMTP_PASS,
         },
-        logger: true,        // turn on Nodemailer logging (prints to console)
-        debug: true,         // include SMTP protocol logs
-        connectionTimeout: 20000,
-        greetingTimeout: 20000,
+        family: 4, // Force IPv4
+        logger: true,
+        debug: true,
+        connectionTimeout: 30000, // Increased timeout
+        greetingTimeout: 30000,
+        socketTimeout: 30000,
         tls: {
-            // temporarily allow self-signed certs if TLS verification fails in testing
-            rejectUnauthorized: false
+            rejectUnauthorized: false,
+            ciphers: 'SSLv3' // Help with some older SMTP servers
         }
     });
 
