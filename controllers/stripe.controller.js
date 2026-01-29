@@ -275,7 +275,7 @@ const confirmPayment = async (req, res) => {
     } catch (error) {
         console.error('❌ Error confirming payment:', error);
         console.error('Error stack:', error.stack);
-        
+
         // Check if order was created despite error
         try {
             const paymentIntentId = req.body?.paymentIntentId;
@@ -386,8 +386,8 @@ const createCheckoutSession = async (req, res, next) => {
             payment_method_types: ['card'],
             mode: 'payment',
             line_items: lineItems,
-            success_url: `${req.headers.origin || process.env.FRONTEND_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${req.headers.origin || process.env.FRONTEND_URL}/payment-cancel`,
+            success_url: `${req.headers.origin || process.env.FRONTEND_URL || 'https://buy2brands.com'}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${req.headers.origin || process.env.FRONTEND_URL || 'https://buy2brands.com'}/payment-cancel`,
             customer_email: req.user.email,
             client_reference_id: req.user._id.toString(),
             metadata: {
