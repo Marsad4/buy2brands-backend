@@ -27,10 +27,21 @@ const consultationRoutes = require('./routes/consultation.routes');
 const app = express();
 const httpServer = createServer(app);
 
+// Allowed origins
+const allowedOrigins = [
+    'http://localhost:3000',
+    'https://buy2brands.com',
+    'https://www.buy2brands.com'
+];
+
+if (process.env.FRONTEND_URL) {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
 // Initialize Socket.io
 const io = new Server(httpServer, {
     cors: {
-        origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+        origin: allowedOrigins,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
         credentials: true
     }
@@ -47,7 +58,7 @@ connectDatabase();
 
 // CORS Configuration
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: allowedOrigins,
     credentials: true
 }));
 
